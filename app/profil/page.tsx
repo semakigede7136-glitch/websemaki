@@ -66,7 +66,7 @@ export default function ProfilPage() {
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">Profil Dusun Semaki Gede</h1>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto">Melestarikan warisan budaya batik tradisional dan mengembangkan potensi masyarakat menuju dusun yang mandiri dan sejahtera</p>
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto">Melestarikan warisan budaya dan mengembangkan potensi masyarakat menuju dusun yang mandiri dan sejahtera</p>
         </div>
       </section>
 

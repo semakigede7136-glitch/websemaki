@@ -61,13 +61,6 @@ export default function Footer() {
                   <Mail className="h-5 w-5 text-green-400" />
                   <span className="text-gray-300">semakigede7136@gmail.com</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <UserCircle2 className="h-5 w-5 text-green-400" />
-                  <span className="text-gray-300">Pengembang: </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-gray-300">Muhammad Yasir Suroto (muhyasirsuroto@gmail.com)</span>
-                </div>
               </div>
             </div>
           </div>

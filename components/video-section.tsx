@@ -5,7 +5,7 @@ export default function VideoSection() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">Video Dokumenter</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12">
-            Kampung Semaki Gede telah berdiri selama puluhan tahun dengan tradisi batik yang kuat. Setiap motif batik yang dihasilkan memiliki makna filosofis yang mendalam, mencerminkan kehidupan dan nilai-nilai masyarakat setempat. Dengan
+            Kampung Semaki Gede telah berdiri selama puluhan tahun dengan budaya yang selama ini dijaga sepenuh hati. Meneruskan budaya yang ada untuk generasi selanjutnya. Menjunjung tinggi kedisiplinan dan kebersamaan serta dengan
             dukungan seluruh warga, kampung ini terus berupaya melestarikan budaya sambil mengembangkan ekonomi kreatif.
           </p>
 
