@@ -1,9 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
   "/profil/page": "app/profil/page.js",
   "/kegiatan/page": "app/kegiatan/page.js",
+  "/regulasi/page": "app/regulasi/page.js",
   "/umkm/page": "app/umkm/page.js",
-  "/kegiatan/[id]/page": "app/kegiatan/[id]/page.js",
-  "/regulasi/page": "app/regulasi/page.js"
+  "/kegiatan/[id]/page": "app/kegiatan/[id]/page.js"
 }

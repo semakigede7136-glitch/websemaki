@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchSliderData, transformSliderData } from "@/lib/google-sheets/google-sheets-multi";
+import { fetchSliderData, transformSliderData, getDirectGoogleDriveUrlBackground } from "@/lib/google-sheets/google-sheets-multi";
 import Link from "next/link";
 
 interface SliderData {
@@ -19,46 +19,23 @@ export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderData, setSliderData] = useState<SliderData[]>([]);
 
-  // Fallback data jika Google Sheets belum tersedia
-  const fallbackSlides = [
-    {
-      id: "1",
-      image_url: "/asset/background/pentingsari",
-      title: "Kampung Semaki Gede",
-      subtitle: "Melestarikan warisan budaya dan mendokumentasikan kehidupan masyarakat dalam harmoni budaya yang telah turun temurun.",
-      is_active: "1",
-      sort_order: "1",
-    },
-    {
-      id: "2",
-      image_url: "/api/placeholder/1200/600",
-      title: "Budaya Kesenian yang Beragam",
-      subtitle: "Keragaman budaya yang diwariskan dari generasi ke generasi mencerminkan identitas dan kekayaan tradisi masyarakat.",
-      is_active: "1",
-      sort_order: "2",
-    },
-  ];
-
   useEffect(() => {
     const load = async () => {
-      try {
-        const rows = await fetchSliderData();
-        const transformed = transformSliderData(rows);
-        if (transformed.length) {
-          setSliderData(
-            transformed.map((s) => ({
-              id: s.id,
-              image_url: s.imageUrl,
-              title: s.title,
-              subtitle: s.subtitle,
-              is_active: "1",
-              sort_order: "0",
-            }))
-          );
-          return;
-        }
-      } catch (_) {}
-      setSliderData(fallbackSlides);
+      const rows = await fetchSliderData();
+      const transformed = transformSliderData(rows);
+      if (transformed.length) {
+        setSliderData(
+          transformed.map((s) => ({
+            id: s.id,
+            image_url: s.image_url,
+            title: s.title,
+            subtitle: s.subtitle,
+            is_active: "1",
+            sort_order: "0",
+          }))
+        );
+        return;
+      }
     };
     load();
   }, []);
@@ -84,7 +61,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
         style={{
-          backgroundImage: `url(${sliderData[currentSlide]?.image_url})`,
+          backgroundImage: `url(${getDirectGoogleDriveUrlBackground(sliderData[currentSlide]?.image_url)})`,
         }}
       >
         {/* Overlay */}
@@ -98,7 +75,7 @@ export default function HeroSection() {
           <p className="text-lg md:text-xl mb-8 text-shadow max-w-2xl mx-auto">{sliderData[currentSlide]?.subtitle}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/profil">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-3">
+              <Button size="lg" className="bg-green-600 hover:bg-[#d9851f] text-white px-8 py-3">
                 Info Lebih Lanjut
               </Button>
             </Link>

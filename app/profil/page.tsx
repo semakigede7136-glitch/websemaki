@@ -15,9 +15,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Users, Home, TreePine, Award, Heart } from "lucide-react";
 
+const categories = ["Semua", "Kantor", "Tempat Ibadah", "Sanggar Budaya", "Sekolah", "Balai", "Kesehatan", "Tempat Makan", "Akses Masuk"];
+
 export default function ProfilPage() {
   const [organization, setOrganization] = useState<any[]>([]);
   const [facilities, setFacilities] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [achievements, setAchievements] = useState<any[]>([]);
 
   useEffect(() => {
@@ -33,6 +36,30 @@ export default function ProfilPage() {
     }
     loadData();
   }, []);
+
+  // bikin variabel hasil filter
+  const filteredFacilities = selectedCategory === "Semua" ? facilities : facilities.filter((f) => f.category.toLowerCase() === selectedCategory.toLowerCase());
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case "kantor":
+        return "bg-green-100 text-green-800";
+      case "Tempat Ibadah":
+        return "bg-blue-100 text-blue-800";
+      case "Sanggar Budaya":
+        return "bg-yellow-100 text-yellow-800";
+      case "Balai":
+        return "bg-orange-100 text-orange-800";
+      case "Kesehatan":
+        return "bg-red-100 text-red-800";
+      case "Tempat Makan":
+        return "bg-purple-100 text-purple-800";
+      case "Akses Masuk":
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -123,14 +150,8 @@ export default function ProfilPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
                 <Award className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">UMKM & Pelatihan</h3>
-              <p className="text-gray-600 mb-4">Pengembangan usaha mikro, kecil, dan menengah berbasis batik tradisional dengan berbagai program pelatihan dan pendampingan.</p>
-              <ul className="text-sm text-gray-600 space-y-1 text-left">
-                <li>• Sentra Kerajinan Batik</li>
-                <li>• Pelatihan Kewirausahaan</li>
-                <li>• Pendampingan UMKM Digital</li>
-                <li>• Pemasaran Produk Online</li>
-              </ul>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">UMKM</h3>
+              <p className="text-gray-600 mb-4">Pengembangan usaha mikro, kecil, dan menengah.</p>
             </Card>
 
             {/* Kebersihan Lingkungan */}
@@ -155,12 +176,6 @@ export default function ProfilPage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Kampung Tangguh Bencana</h3>
               <p className="text-gray-600 mb-4">Program penguatan ketahanan masyarakat dalam menghadapi berbagai bencana dan situasi darurat.</p>
-              <ul className="text-sm text-gray-600 space-y-1 text-left">
-                <li>• Tim Siaga Bencana</li>
-                <li>• Pelatihan Pertolongan Pertama</li>
-                <li>• Sistem Peringatan Dini</li>
-                <li>• Evakuasi dan Penampungan</li>
-              </ul>
             </Card>
           </div>
         </div>
@@ -170,7 +185,7 @@ export default function ProfilPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Program Masjos</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Program MasJos</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">Masyarakat Jogja Olah Sampah - Program pengelolaan sampah.</p>
           </div>
 
@@ -286,8 +301,8 @@ export default function ProfilPage() {
                     <CardTitle className="text-lg font-semibold text-green-700 mt-4">{member.name}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600">{member.period}</p>
                     <p className="text-gray-600">{member.position}</p>
+                    <p className="text-gray-600">{member.period}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -330,14 +345,35 @@ export default function ProfilPage() {
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Fasilitas Umum</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">Ringkasan fasilitas yang tersedia.</p>
           </div>
+
+          {/* Search and Filters */}
+          <section className="py-12 bg-white">
+            <div className="container mx-auto px-4">
+              <div className="max-w-6xl mx-auto">
+                {/* Category Filter */}
+                <div className="flex flex-wrap justify-center gap-4">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`px-6 py-2 rounded-full font-medium transition-colors ${selectedCategory === category ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {facilities.map((f, i) => (
+            {filteredFacilities.map((f, i) => (
               <Card key={i} className="overflow-hidden card-hover">
                 <div className="h-48 bg-gray-200">
                   {f.image_url ? <iframe src={f.image_url.replace("/view?usp=sharing", "/preview")} className="w-full h-full" allow="autoplay" /> : <span className="text-gray-500">Tidak ada gambar</span>}
                 </div>
                 <CardHeader>
                   <CardTitle className="text-lg text-green-700">{f.name}</CardTitle>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(f.category)}`}>{f.category}</span>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 text-sm">{f.location}</p>

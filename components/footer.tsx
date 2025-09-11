@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Instagram, Youtube, UserCircle2 } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -51,15 +51,22 @@ export default function Footer() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-5 w-5 text-green-400" />
-                  <span className="text-gray-300">Semaki, Umbulharjo, Yogyakarta</span>
+                  <span className="text-gray-300">Semaki Gede, Semaki, Umbulharjo, Yogyakarta</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Phone className="h-5 w-5 text-green-400" />
-                  <span className="text-gray-300">(0274) 123-4567</span>
+                  <span className="text-gray-300">+62 812-1998-6750</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-5 w-5 text-green-400" />
                   <span className="text-gray-300">semakigede7136@gmail.com</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <UserCircle2 className="h-5 w-5 text-green-400" />
+                  <span className="text-gray-300">Pengembang: </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-300">Muhammad Yasir Suroto (muhyasirsuroto@gmail.com)</span>
                 </div>
               </div>
             </div>
@@ -69,15 +76,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">© 2024 Dusun Semaki Gede. Semua hak dilindungi.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-400 hover:text-green-400 text-sm transition-colors">
-                Kebijakan Privasi
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-green-400 text-sm transition-colors">
-                Syarat & Ketentuan
-              </Link>
-            </div>
+            <p className="text-gray-400 text-sm">© 2025 Dusun Semaki Gede. Semua hak dilindungi.</p>
           </div>
         </div>
       </div>

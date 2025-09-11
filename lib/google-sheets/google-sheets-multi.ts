@@ -1,6 +1,3 @@
-// Utility functions for fetching data from multiple Google Sheets
-// Setiap jenis data memiliki sheet terpisah untuk kemudahan pengelolaan
-
 export interface SheetData {
   [key: string]: string;
 }
@@ -31,10 +28,8 @@ export interface ActivityData {
   contact_person: string;
   contact_phone: string;
   wa_link?: string;
-  gallery: string[]; // 🔥 ubah dari string ke string[]
+  gallery: string[];
 }
-
-
 
 export interface VillageInfo {
   id: string;
@@ -60,7 +55,6 @@ export interface NewsData {
   created_at: string;
   updated_at: string;
 }
-
 
 export interface RegulationData {
   id: string;
@@ -111,7 +105,6 @@ export interface OrganizationData {
   updated_at: string;
 }
 
-
 export type UMKMData = {
   id: string;
   name: string;
@@ -131,13 +124,11 @@ export async function fetchGoogleSheetData(sheetUrl: string): Promise<SheetData[
 
     const csvText = await response.text();
 
-    // Split baris dengan hati-hati (menghapus \r untuk konsistensi)
     const lines = csvText.replace(/\r/g, "").split("\n");
     if (lines.length < 2) {
       return [];
     }
 
-    // Parse header
     const headers = parseCsvLine(lines[0]);
 
     const data: SheetData[] = [];
@@ -162,8 +153,6 @@ export async function fetchGoogleSheetData(sheetUrl: string): Promise<SheetData[
   }
 }
 
-
-// Fungsi bantu: parsing 1 baris CSV dengan memperhatikan tanda kutip
 function parseCsvLine(line: string): string[] {
   const result: string[] = [];
   let current = "";
@@ -173,7 +162,6 @@ function parseCsvLine(line: string): string[] {
     const char = line[i];
 
     if (char === '"' && line[i + 1] === '"') {
-      // Handle escaped quotes ("")
       current += '"';
       i++;
     } else if (char === '"') {
@@ -193,7 +181,6 @@ function parseCsvLine(line: string): string[] {
 const getBaseSheetUrl = () => {
   const url = process.env.GOOGLE_SHEETS_URL || "https://docs.google.com/spreadsheets/d/e/2PACX-1vRla3EqHojQonDKnkPyFDNzkP7p-FrJewAUby9SaV7eWO82Os0O8BAzoNQx5-UCdwCQVCoFdJX3qYYr";
 
-  // Check if URL is still using placeholder
   if (url.includes("YOUR_SHEET_ID")) {
     console.warn("⚠️ Google Sheets URL masih menggunakan placeholder. Silakan setup environment variable.");
     return null;
@@ -202,13 +189,11 @@ const getBaseSheetUrl = () => {
   return url;
 };
 
-// Helper functions untuk mengambil data dari sheet tertentu
 export async function fetchSliderData(): Promise<SliderData[]> {
   const baseUrl = getBaseSheetUrl();
   if (!baseUrl) return [];
 
-  // slider_data gid (sesuaikan jika berbeda)
-  const sheetUrl = `${baseUrl}/pub?gid=1928961272&output=csv`;
+  const sheetUrl = `${baseUrl}/pub?gid=1807570820&output=csv`;
   const data = await fetchGoogleSheetData(sheetUrl);
   return data as unknown as SliderData[];
 }
@@ -231,7 +216,6 @@ export async function fetchNewsData(): Promise<NewsData[]> {
   return data as unknown as NewsData[];
 }
 
-
 export async function fetchRegulationData(): Promise<RegulationData[]> {
   const baseUrl = getBaseSheetUrl();
   if (!baseUrl) return [];
@@ -250,30 +234,20 @@ export async function fetchAchievementData(): Promise<AchievementData[]> {
   return data as unknown as AchievementData[];
 }
 
-// Bentuk data mentah dari Google Sheets (gallery masih string)
 type RawActivityData = Omit<ActivityData, "gallery"> & { gallery: string };
 
-// Fungsi fetch
 export async function fetchActivityData(): Promise<ActivityData[]> {
   const baseUrl = getBaseSheetUrl();
   if (!baseUrl) return [];
 
-  // Ganti gid sesuai dengan sheet "kegiatan" kamu
   const sheetUrl = `${baseUrl}/pub?gid=1971002699&output=csv`;
   const data = await fetchGoogleSheetData(sheetUrl);
 
-  // Convert ke ActivityData (gallery jadi array string)
   return (data as RawActivityData[]).map((item) => ({
     ...item,
-    gallery: item.gallery
-      ? item.gallery.split(",").map((g) => g.trim())
-      : [],
+    gallery: item.gallery ? item.gallery.split(",").map((g) => g.trim()) : [],
   }));
 }
-
-
-
-
 
 export async function fetchGalleryData(): Promise<GalleryData[]> {
   const baseUrl = getBaseSheetUrl();
@@ -297,12 +271,10 @@ export async function fetchOrganizationData(): Promise<OrganizationData[]> {
   const baseUrl = getBaseSheetUrl();
   if (!baseUrl) return [];
 
-  // ganti gid sesuai sheet "struktur organisasi"
-  const sheetUrl = `${baseUrl}/pub?gid=484892931&output=csv`; 
+  const sheetUrl = `${baseUrl}/pub?gid=484892931&output=csv`;
   const data = await fetchGoogleSheetData(sheetUrl);
   return data as unknown as OrganizationData[];
 }
-
 
 export async function fetchUMKMData(): Promise<UMKMData[]> {
   const baseUrl = getBaseSheetUrl();
@@ -316,11 +288,11 @@ export async function fetchUMKMData(): Promise<UMKMData[]> {
 // Utility functions untuk transform data
 export function transformSliderData(data: SliderData[]) {
   return data
-    .filter((item) => item.is_active?.toLowerCase() === "true")
+    .filter((item) => item.is_active === "1" || item.is_active?.toLowerCase() === "true")
     .sort((a, b) => parseInt(a.sort_order) - parseInt(b.sort_order))
     .map((item) => ({
       id: item.id,
-      imageUrl: item.image_url,
+      image_url: getDirectGoogleDriveUrl(item.image_url),
       title: item.title,
       subtitle: item.subtitle,
     }));
@@ -340,16 +312,27 @@ export function transformVillageInfo(data: VillageInfo[]) {
   };
 }
 
-// PERUBAHAN DI SINI: Mengubah fungsi agar menghasilkan URL untuk iframe
 export function getDirectGoogleDriveUrl(urlOrId: string) {
   if (!urlOrId) return urlOrId;
-  const fileIdRegex = /[a-zA-Z0-9_-]{33}/; // Regex untuk ID Google Drive yang lebih akurat
+  const fileIdRegex = /[a-zA-Z0-9_-]{33}/;
   const match = urlOrId.match(fileIdRegex);
   if (match && match[0]) {
     return `https://drive.google.com/file/d/${match[0]}/preview`;
   }
   return urlOrId;
 }
+
+export function getDirectGoogleDriveUrlBackground(urlOrId: string) {
+  if (!urlOrId) return urlOrId;
+  const fileIdRegex = /[-\w]{25,}/;
+  const match = urlOrId.match(fileIdRegex);
+  if (match && match[0]) {
+    return `https://drive.google.com/thumbnail?id=${match[0]}&sz=w2000`;
+  }
+  return urlOrId;
+}
+
+
 
 export function transformNewsData(data: NewsData[]) {
   return data
@@ -367,9 +350,6 @@ export function transformNewsData(data: NewsData[]) {
       publishedAt: item.published_at,
     }));
 }
-
-
-
 
 export function transformRegulationData(data: RegulationData[]) {
   return data.map((item) => ({
@@ -414,7 +394,6 @@ export function transformFacilityData(data: FacilityData[]) {
     imageUrl: getDirectGoogleDriveUrl(item.image_url),
   }));
 }
-
 
 export function transformOrganizationData(data: OrganizationData[]) {
   return data.map((item) => ({

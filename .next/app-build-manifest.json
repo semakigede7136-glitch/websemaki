@@ -21,25 +21,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/kegiatan/page.js"
     ],
-    "/regulasi/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/regulasi/page.js"
-    ],
     "/kegiatan/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/kegiatan/[id]/page.js"
     ],
+    "/regulasi/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/regulasi/page.js"
+    ],
     "/umkm/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/umkm/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
